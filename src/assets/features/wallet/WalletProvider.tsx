@@ -16,8 +16,7 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
-
-
+import { ReactNode } from 'react';
 
 const config = getDefaultConfig({
   appName: 'Onbogo',
@@ -26,18 +25,18 @@ const config = getDefaultConfig({
   ssr: false,
 });
 
-
-
 const queryClient = new QueryClient();
 
-const App = () => {
+const WalletProvider = ({ children }: { children: ReactNode }) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider children={undefined}>
-          {/* Your App */}
+        <RainbowKitProvider>
+          {children}
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
 };
+
+export default WalletProvider;

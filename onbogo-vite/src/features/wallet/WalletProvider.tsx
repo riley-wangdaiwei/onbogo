@@ -16,7 +16,7 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 const config = getDefaultConfig({
   appName: 'Onbogo',

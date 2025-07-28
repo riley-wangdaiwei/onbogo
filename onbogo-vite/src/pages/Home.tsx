@@ -25,7 +25,7 @@ export default function Home() {
     const interval = setInterval(animateGlass, 1800)
 
     logoControls.start({
-      x: [1500, -1500],
+      x: [2000, -2200],
       transition: { duration: 12, ease: 'linear', repeat: Infinity },
     })
 
@@ -44,78 +44,77 @@ export default function Home() {
         position: 'relative',
         color: 'white',
         fontFamily: 'Space Grotesk, sans-serif',
-        gap: '60px',
         overflow: 'hidden',
       }}
     >
-      <div style={{ position: 'relative', width: 750, height: 375 }}>
-        {/* Sliding Logo */}
-        <motion.img
-          src={logo}
-          alt="Onbogo Logo"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: 950,
-            height: 475,
-            objectFit: 'contain',
-            zIndex: 0,
-          }}
-          animate={logoControls}
-        />
+      {/* Scaled-down content */}
+      <div style={{ transform: 'scale(0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ position: 'relative', width: 750, height: 375 }}>
+          <motion.img
+            src={logo}
+            alt="Onbogo Logo"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: 950,
+              height: 475,
+              objectFit: 'contain',
+              zIndex: 0,
+            }}
+            animate={logoControls}
+          />
 
-        {/* Three-line Text */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            margin: 0,
-            fontWeight: 600,
-            fontSize: '5rem',
-            userSelect: 'none',
-            color: 'white',
-            lineHeight: 2.5,
-            whiteSpace: 'pre-line',
-            textAlign: 'center',
-            zIndex: 2,
-          }}
-        >
-          {'Onboard,\nGo,\nGovern.'}
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              margin: 0,
+              fontWeight: 600,
+              fontSize: '5rem',
+              userSelect: 'none',
+              color: 'white',
+              lineHeight: 2.5,
+              whiteSpace: 'pre-line',
+              textAlign: 'center',
+              zIndex: 2,
+            }}
+          >
+            {'Onboard,\nGo,\nGovern.'}
+          </div>
+
+          <motion.div
+            animate={glassControls}
+            style={{
+              position: 'absolute',
+              top: '32%',
+              left: '20%',
+              width: '60%',
+              height: '40%',
+              background: 'rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(25px)',
+              WebkitBackdropFilter: 'blur(25px)',
+              borderRadius: 16,
+              border: '1.5px solid rgba(255, 255, 255, 0.25)',
+              boxShadow:
+                'inset 0 0 10px rgba(255, 255, 255, 0.2), 0 4px 30px rgba(0,0,0,0.2)',
+              pointerEvents: 'none',
+              zIndex: 1,
+            }}
+          />
         </div>
-
-        {/* Moving Glass Highlight */}
-        <motion.div
-          animate={glassControls}
-          style={{
-            position: 'absolute',
-            top: '32%',
-            left: '20%',
-            width: '60%',
-            height: '40%',
-            background: 'rgba(255,255,255,0.1)',
-            backdropFilter: 'blur(25px)',
-            WebkitBackdropFilter: 'blur(25px)',
-            borderRadius: 16,
-            border: '1.5px solid rgba(255, 255, 255, 0.25)',
-            boxShadow:
-              'inset 0 0 10px rgba(255, 255, 255, 0.2), 0 4px 30px rgba(0,0,0,0.2)',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
       </div>
 
-      {/* Buttons */}
+      {/* Large Buttons */}
       <div
         style={{
           display: 'flex',
-          gap: 50,
+          gap: 100,
           zIndex: 10,
-          transform: 'scale(1.5)',
-          marginTop: '80px',
+          transform: 'scale(2)',
+          marginTop: '120px',
           alignItems: 'center',
         }}
       >

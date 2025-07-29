@@ -18,7 +18,7 @@ export default function Intents() {
   const [events, setEvents] = useState<EventData[]>([])
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const wallet = '0x4e83362442b8d1bec281594cea3050c8eb01311c'
+  const wallet = '0x3BfC20f0B9aFcAcE800D73D2191166FF16540258'
 
 
   useEffect(() => {

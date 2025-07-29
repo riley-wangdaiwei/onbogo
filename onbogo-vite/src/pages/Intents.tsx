@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import ConnectButton from '../features/wallet/ConnectButton'
 import ProgressBar from '../components/ProgressBar'
 
+
 type EventData = {
   amount: string | null
   fee: string | null
@@ -11,12 +12,14 @@ type EventData = {
   id: string
 }
 
+
 export default function Intents() {
   const navigate = useNavigate()
   const [events, setEvents] = useState<EventData[]>([])
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const wallet = '0x6a8b188fadbe8b52a2c23ea2d0df74f8956e7730'
+  const wallet = '0x938220F7c66e39f96928AE413Dedb9b54Bda83Ec'
+
 
   useEffect(() => {
     async function fetchEvents() {
@@ -34,7 +37,9 @@ export default function Intents() {
           return
         }
 
+
         const latestThree = data.items.slice(0, 3)
+
 
         const eventsWithTokens = await Promise.all(
           latestThree.map(async (event: any) => {
@@ -54,6 +59,7 @@ export default function Intents() {
               }
             }
 
+
             return {
               id: event.id,
               amount: event.details?.tokenActions?.[0]?.amount ?? null,
@@ -64,6 +70,7 @@ export default function Intents() {
           })
         )
 
+
         setEvents(eventsWithTokens)
         setSelectedId(eventsWithTokens[0]?.id ?? null)
       } catch (e) {
@@ -71,16 +78,20 @@ export default function Intents() {
       }
     }
 
+
     fetchEvents()
   }, [])
+
 
   if (error) {
     return <p style={{ color: 'red' }}>{error}</p>
   }
 
+
   if (events.length === 0) {
     return <p>Loading...</p>
   }
+
 
   return (
     <div
@@ -96,11 +107,13 @@ export default function Intents() {
     >
       <ProgressBar />
 
+
       {/* Multiple Choice Section */}
       <div style={{ marginTop: 60, marginBottom: 40, textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', marginBottom: 24 }}>
           Vote the Best Real Trade
         </h2>
+
 
         <form
           style={{
@@ -115,6 +128,7 @@ export default function Intents() {
               amount && fee && tokenName
                 ? `Someone just got ${amount} ${tokenName} with gas fee of ${fee}.`
                 : 'Data incomplete.'
+
 
             return (
               <label
@@ -146,6 +160,7 @@ export default function Intents() {
         </form>
       </div>
 
+
       {/* Buttons Container */}
       <div
         style={{
@@ -159,6 +174,7 @@ export default function Intents() {
         <div style={{ transform: 'scale(1.7)' }}>
           <ConnectButton />
         </div>
+
 
         <button
           onClick={() => navigate('/trade')}

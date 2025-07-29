@@ -4,8 +4,7 @@ export default function Insights() {
   return (
     <div>
       <ProgressBar />  
-      <h1>Insights Page</h1>
-      <p>You're at the end of the flow!</p>
+      <h1>Mint Page</h1>
     </div>
   )
 }

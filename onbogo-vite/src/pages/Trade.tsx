@@ -16,9 +16,12 @@ export default function Trade() {
   const [events, setEvents] = useState<EventData[]>([])
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const wallet = '0x56D8BBe2D518205b521AEB86A58E1B53b047a44F'
+  const [wallet, setWallet] = useState<string | null>(null)
+  const [inputWallet, setInputWallet] = useState<string>('')
 
   useEffect(() => {
+    if (!wallet) return
+
     async function fetchEvents() {
       try {
         const res = await fetch(
@@ -72,14 +75,53 @@ export default function Trade() {
     }
 
     fetchEvents()
-  }, [])
+  }, [wallet])
 
-  if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>
-  }
-
-  if (events.length === 0) {
-    return <p>Loading...</p>
+  if (!wallet || events.length === 0) {
+    return (
+      <div style={{ backgroundColor: 'black', color: 'white', minHeight: '100vh', padding: 40 }}>
+        <ProgressBar />
+        <div style={{ textAlign: 'center', marginTop: 60 }}>
+          <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', marginBottom: 24 }}>
+            Enter Professor's Wallet Address
+          </h2>
+          <input
+            type="text"
+            placeholder="0x..."
+            value={inputWallet}
+            onChange={(e) => setInputWallet(e.target.value)}
+            style={{
+              padding: '12px',
+              fontSize: '1rem',
+              borderRadius: '8px',
+              border: 'none',
+              width: '300px',
+              marginRight: '12px',
+            }}
+          />
+          <button
+            onClick={() => {
+              setError(null)
+              setEvents([])
+              setWallet(inputWallet.trim())
+            }}
+            style={{
+              padding: '12px 20px',
+              fontSize: '1rem',
+              borderRadius: '8px',
+              border: 'none',
+              backgroundColor: 'white',
+              color: 'black',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+          >
+            Load Events
+          </button>
+          {error && <p style={{ color: 'red', marginTop: 20 }}>{error}</p>}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -99,7 +141,7 @@ export default function Trade() {
       {/* Multiple Choice Section */}
       <div style={{ marginTop: 60, marginBottom: 40, textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', marginBottom: 24 }}>
-          Vote the Smartest Trade
+          Vote Your Professor's Smartest Trade
         </h2>
 
         <form
@@ -113,7 +155,7 @@ export default function Trade() {
           {events.map(({ id, amount, fee, tokenName }) => {
             const sentence =
               amount && fee && tokenName
-                ? `Someone just got ${amount} ${tokenName} with gas fee of ${fee}.`
+                ? `Your professor just got ${amount} ${tokenName} with gas fee of ${fee}.`
                 : 'Data incomplete.'
 
             return (
@@ -188,5 +230,3 @@ export default function Trade() {
     </div>
   )
 }
-
-

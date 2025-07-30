@@ -11,6 +11,8 @@ type EventData = {
   id: string
 }
 
+const STORAGE_KEY = 'votes'
+
 export default function Trade() {
   const navigate = useNavigate()
   const [events, setEvents] = useState<EventData[]>([])
@@ -18,6 +20,18 @@ export default function Trade() {
   const [error, setError] = useState<string | null>(null)
   const [wallet, setWallet] = useState<string | null>(null)
   const [inputWallet, setInputWallet] = useState<string>('')
+  const [latestVote, setLatestVote] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Load latest vote from localStorage
+    const existingVotes = localStorage.getItem(STORAGE_KEY)
+    if (existingVotes) {
+      const votes: string[] = JSON.parse(existingVotes)
+      if (votes.length > 0) {
+        setLatestVote(votes[votes.length - 1])
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (!wallet) return
@@ -76,6 +90,23 @@ export default function Trade() {
 
     fetchEvents()
   }, [wallet])
+
+  function storeVote() {
+    const selectedEvent = events.find((e) => e.id === selectedId)
+    if (!selectedEvent) return
+
+    const { amount, fee, tokenName } = selectedEvent
+    const sentence =
+      amount && fee && tokenName
+        ? `Your professor just got ${amount} ${tokenName} with gas fee of ${fee}.`
+        : 'Data incomplete.'
+
+    const existingVotes = localStorage.getItem(STORAGE_KEY)
+    let votes: string[] = existingVotes ? JSON.parse(existingVotes) : []
+    votes.push(sentence)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(votes))
+    setLatestVote(sentence)
+  }
 
   if (!wallet || events.length === 0) {
     return (
@@ -192,10 +223,10 @@ export default function Trade() {
       <div
         style={{
           display: 'flex',
-          gap: 200,
-          justifyContent: 'center',
+          flexDirection: 'column',
           alignItems: 'center',
           paddingBottom: 100,
+          gap: 20,
         }}
       >
         <div style={{ transform: 'scale(1.7)' }}>
@@ -203,7 +234,10 @@ export default function Trade() {
         </div>
 
         <button
-          onClick={() => navigate('/mint')}
+          onClick={() => {
+            storeVote()
+            navigate('/mint')
+          }}
           style={{
             padding: '0.84rem 2.1rem',
             fontSize: '1.4rem',
@@ -230,3 +264,4 @@ export default function Trade() {
     </div>
   )
 }
+

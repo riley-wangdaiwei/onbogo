@@ -142,7 +142,7 @@ export default function Home() {
             e.currentTarget.style.backgroundColor = 'white'
           }}
         >
-          Start to Trade by a Few Clicks
+          Learn to Trade by Simple Voting
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { motion, useAnimation } from 'framer-motion'
 import logo from '../images/logo_onbogo_white.png' // Your logo path
 
 const steps = ['/', '/intents', '/trade', '/mint', '/vote', '/insights']
-const labels = ['Home', 'Vote', 'Ballot', 'Mint', 'Complete', 'Insights']
+const labels = ['Home', 'Learn', 'Vote', 'Mint', 'Complete', 'Insights']
 
 export default function ProgressBar() {
   const { pathname } = useLocation()

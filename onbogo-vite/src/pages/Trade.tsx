@@ -1,70 +1,75 @@
-import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import ConnectButton from '../features/wallet/ConnectButton'
-import ProgressBar from '../components/ProgressBar'
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import ConnectButton from '../features/wallet/ConnectButton';
+import ProgressBar from '../components/ProgressBar';
+import { BrowserProvider, Contract, parseUnits } from 'ethers';
+import OnbogoTokenABI from '../abis/OnbogoToken.json';
 
 type EventData = {
-  amount: string | null
-  fee: string | null
-  address: string | null
-  tokenName: string | null
-  id: string
-}
+  amount: string | null;
+  fee: string | null;
+  address: string | null;
+  tokenName: string | null;
+  id: string;
+};
 
-const STORAGE_KEY = 'votes'
+const STORAGE_KEY = 'votes';
+const contractAddress = '0x3247988647a331B68Ae86426F56CF56E9A2fbA1F';
 
 export default function Trade() {
-  const navigate = useNavigate()
-  const [events, setEvents] = useState<EventData[]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [wallet, setWallet] = useState<string | null>(null)
-  const [inputWallet, setInputWallet] = useState<string>('')
-  const [latestVote, setLatestVote] = useState<string | null>(null)
+  const navigate = useNavigate();
+  const [events, setEvents] = useState<EventData[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [wallet, setWallet] = useState<string | null>(null);
+  const [inputWallet, setInputWallet] = useState<string>('');
+  const [latestVote, setLatestVote] = useState<string | null>(null);
+  const [minting, setMinting] = useState(false);
+  const [mintStatus, setMintStatus] = useState<string | null>(null);
 
   useEffect(() => {
     // Load latest vote from localStorage
-    const existingVotes = localStorage.getItem(STORAGE_KEY)
+    const existingVotes = localStorage.getItem(STORAGE_KEY);
     if (existingVotes) {
-      const votes: string[] = JSON.parse(existingVotes)
+      const votes: string[] = JSON.parse(existingVotes);
       if (votes.length > 0) {
-        setLatestVote(votes[votes.length - 1])
+        setLatestVote(votes[votes.length - 1]);
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!wallet) return
+    if (!wallet) return;
 
     async function fetchEvents() {
       try {
         const res = await fetch(
           `https://1inch-vercel-proxy-git-main-onbogos-projects.vercel.app/history/v2.0/history/${wallet}/events?chainId=1&limit=10`
-        )
+        );
         if (!res.ok) {
-          setError(`HTTP error: ${res.status}`)
-          return
+          setError(`HTTP error: ${res.status}`);
+          return;
         }
-        const data = await res.json()
+        const data = await res.json();
         if (!data.items || data.items.length === 0) {
-          setError('No events found')
-          return
+          setError('No events found');
+          return;
         }
 
-        const latestThree = data.items.slice(0, 3)
+        const latestThree = data.items.slice(0, 3);
 
         const eventsWithTokens = await Promise.all(
           latestThree.map(async (event: any) => {
-            const addr = event.details?.tokenActions?.[0]?.address ?? null
-            let tokenName = 'Unknown Token'
+            const addr = event.details?.tokenActions?.[0]?.address ?? null;
+            let tokenName = 'Unknown Token';
             if (addr) {
               try {
                 const tokenRes = await fetch(
                   `https://1inch-vercel-proxy-git-main-onbogos-projects.vercel.app/token/v1.2/1/custom/${addr}`
-                )
+                );
                 if (tokenRes.ok) {
-                  const tokenData = await tokenRes.json()
-                  tokenName = tokenData.name ?? tokenName
+                  const tokenData = await tokenRes.json();
+                  tokenName = tokenData.name ?? tokenName;
                 }
               } catch {
                 // fallback silently
@@ -77,35 +82,69 @@ export default function Trade() {
               fee: event.details?.feeInSmallestNative ?? null,
               address: addr,
               tokenName,
-            }
+            };
           })
-        )
+        );
 
-        setEvents(eventsWithTokens)
-        setSelectedId(eventsWithTokens[0]?.id ?? null)
+        setEvents(eventsWithTokens);
+        setSelectedId(eventsWithTokens[0]?.id ?? null);
+        setError(null);
       } catch (e) {
-        setError(`Fetch error: ${(e as Error).message}`)
+        setError(`Fetch error: ${(e as Error).message}`);
       }
     }
 
-    fetchEvents()
-  }, [wallet])
+    fetchEvents();
+  }, [wallet]);
 
   function storeVote() {
-    const selectedEvent = events.find((e) => e.id === selectedId)
-    if (!selectedEvent) return
+    const selectedEvent = events.find((e) => e.id === selectedId);
+    if (!selectedEvent) return;
 
-    const { amount, fee, tokenName } = selectedEvent
+    const { amount, fee, tokenName } = selectedEvent;
     const sentence =
       amount && fee && tokenName
         ? `Your professor just got ${amount} ${tokenName} with gas fee of ${fee}.`
-        : 'Data incomplete.'
+        : 'Data incomplete.';
 
-    const existingVotes = localStorage.getItem(STORAGE_KEY)
-    let votes: string[] = existingVotes ? JSON.parse(existingVotes) : []
-    votes.push(sentence)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(votes))
-    setLatestVote(sentence)
+    const existingVotes = localStorage.getItem(STORAGE_KEY);
+    let votes: string[] = existingVotes ? JSON.parse(existingVotes) : [];
+    votes.push(sentence);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
+    setLatestVote(sentence);
+  }
+
+  async function mintToken() {
+    try {
+      if (!window.ethereum) {
+        throw new Error('MetaMask is not installed');
+      }
+      setMinting(true);
+      setMintStatus('Requesting wallet connection...');
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      setMintStatus('Connecting to wallet...');
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const address = await signer.getAddress();
+
+      setMintStatus('Preparing contract...');
+      const contract = new Contract(contractAddress, OnbogoTokenABI, signer);
+
+      const amount = parseUnits('1', 18);
+
+      setMintStatus('Sending mint transaction...');
+      const tx = await contract.mint(address, amount);
+      setMintStatus(`Transaction sent: ${tx.hash}`);
+
+      const receipt = await tx.wait();
+      setMintStatus(`Transaction confirmed: ${receipt.transactionHash}`);
+    } catch (error: any) {
+      setMintStatus(`Minting failed: ${error.message || error}`);
+    } finally {
+      setMinting(false);
+    }
   }
 
   if (!wallet || events.length === 0) {
@@ -132,9 +171,9 @@ export default function Trade() {
           />
           <button
             onClick={() => {
-              setError(null)
-              setEvents([])
-              setWallet(inputWallet.trim())
+              setError(null);
+              setEvents([]);
+              setWallet(inputWallet.trim());
             }}
             style={{
               padding: '12px 20px',
@@ -152,7 +191,7 @@ export default function Trade() {
           {error && <p style={{ color: 'red', marginTop: 20 }}>{error}</p>}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -187,7 +226,7 @@ export default function Trade() {
             const sentence =
               amount && fee && tokenName
                 ? `Your professor just got ${amount} ${tokenName} with gas fee of ${fee}.`
-                : 'Data incomplete.'
+                : 'Data incomplete.';
 
             return (
               <label
@@ -214,7 +253,7 @@ export default function Trade() {
                 />
                 {sentence}
               </label>
-            )
+            );
           })}
         </form>
       </div>
@@ -234,10 +273,13 @@ export default function Trade() {
         </div>
 
         <button
-          onClick={() => {
-            storeVote()
-            navigate('/mint')
+          onClick={async () => {
+            setMintStatus(null);
+            storeVote();
+            await mintToken();
+            navigate('/mint');
           }}
+          disabled={minting}
           style={{
             padding: '0.84rem 2.1rem',
             fontSize: '1.4rem',
@@ -252,16 +294,19 @@ export default function Trade() {
             transition: 'background 0.3s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#f0f0f0'
+            e.currentTarget.style.backgroundColor = '#f0f0f0';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'white'
+            e.currentTarget.style.backgroundColor = 'white';
           }}
         >
-          Vote and claim reward!
+          {minting ? 'Minting...' : 'Vote and claim reward!'}
         </button>
+
+        {mintStatus && <p style={{ marginTop: 10 }}>{mintStatus}</p>}
       </div>
     </div>
-  )
+  );
 }
+
 

@@ -6,6 +6,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
+  sepolia,
   mainnet,
   polygon,
   optimism,
@@ -21,7 +22,7 @@ import type { ReactNode } from 'react';
 const config = getDefaultConfig({
   appName: 'Onbogo',
   projectId: '04ca19f1538854f9a9ea7a4980f1f6c6',
-  chains: [mainnet, polygon, optimism, arbitrum, base],
+  chains: [sepolia, mainnet, polygon, optimism, arbitrum, base],
   ssr: false,
 });
 

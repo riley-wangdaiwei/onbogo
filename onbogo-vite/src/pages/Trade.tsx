@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import ConnectButton from '../features/wallet/ConnectButton';
 import ProgressBar from '../components/ProgressBar';
 import { BrowserProvider, Contract, parseUnits } from 'ethers';
 import OnbogoTokenABI from '../abis/OnbogoToken.json';
@@ -268,9 +267,6 @@ export default function Trade() {
           gap: 20,
         }}
       >
-        <div style={{ transform: 'scale(1.7)' }}>
-          <ConnectButton />
-        </div>
 
         <button
           onClick={async () => {

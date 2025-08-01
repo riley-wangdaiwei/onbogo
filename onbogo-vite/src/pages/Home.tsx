@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { motion, useAnimation } from 'framer-motion'
-import ConnectButton from '../features/wallet/ConnectButton'
 import { useNavigate } from 'react-router-dom'
 import logo from '../images/logo_onbogo_white.png'
 
@@ -118,7 +117,6 @@ export default function Home() {
           alignItems: 'center',
         }}
       >
-        <ConnectButton />
 
         <button
           onClick={() => navigate('/intents')}

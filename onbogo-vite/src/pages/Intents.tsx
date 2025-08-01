@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProgressBar from '../components/ProgressBar'
-import ConnectButton from '../features/wallet/ConnectButton'
 
 interface TokenInfo {
   symbol: string
@@ -287,14 +286,11 @@ export default function Intents() {
           gap: 100,
         }}
       >
-        <div style={{ transform: 'scale(1.7)' }}>
-          <ConnectButton />
-        </div>
 
         <button
           onClick={() => navigate('/trade')}
           style={{
-            padding: '0.6rem 1.5rem',
+            padding: '1rem 2.3rem',
             fontSize: '1.8rem',
             fontWeight: '700',
             borderRadius: 16,

@@ -1,86 +1,18 @@
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import ConnectButton from '../features/wallet/ConnectButton'
 import ProgressBar from '../components/ProgressBar'
+import { useAccount, useBalance } from 'wagmi'
 
-type EventData = {
-  amount: string | null
-  fee: string | null
-  address: string | null
-  tokenName: string | null
-  id: string
-}
+const TOKEN_ADDRESS = '0x3247988647a331B68Ae86426F56CF56E9A2fbA1F'
 
 export default function Intents() {
   const navigate = useNavigate()
-  const [events, setEvents] = useState<EventData[]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const wallet = '0x6a8b188fadbe8b52a2c23ea2d0df74f8956e7730'
 
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const res = await fetch(
-          `https://1inch-vercel-proxy-git-main-onbogos-projects.vercel.app/history/v2.0/history/${wallet}/events?chainId=1&limit=10`
-        )
-        if (!res.ok) {
-          setError(`HTTP error: ${res.status}`)
-          return
-        }
-        const data = await res.json()
-        if (!data.items || data.items.length === 0) {
-          setError('No events found')
-          return
-        }
+  const { address, isConnected } = useAccount()
 
-        const latestThree = data.items.slice(0, 3)
-
-        const eventsWithTokens = await Promise.all(
-          latestThree.map(async (event: any) => {
-            const addr = event.details?.tokenActions?.[0]?.address ?? null
-            let tokenName = 'Unknown Token'
-            if (addr) {
-              try {
-                const tokenRes = await fetch(
-                  `https://1inch-vercel-proxy-git-main-onbogos-projects.vercel.app/token/v1.2/1/custom/${addr}`
-                )
-                if (tokenRes.ok) {
-                  const tokenData = await tokenRes.json()
-                  tokenName = tokenData.name ?? tokenName
-                }
-              } catch {
-                // fallback silently
-              }
-            }
-
-            return {
-              id: event.id,
-              amount: event.details?.tokenActions?.[0]?.amount ?? null,
-              fee: event.details?.feeInSmallestNative ?? null,
-              address: addr,
-              tokenName,
-            }
-          })
-        )
-
-        setEvents(eventsWithTokens)
-        setSelectedId(eventsWithTokens[0]?.id ?? null)
-      } catch (e) {
-        setError(`Fetch error: ${(e as Error).message}`)
-      }
-    }
-
-    fetchEvents()
-  }, [])
-
-  if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>
-  }
-
-  if (events.length === 0) {
-    return <p>Loading...</p>
-  }
+  const { data: balanceData, isError, isLoading } = useBalance({
+    address,
+    token: TOKEN_ADDRESS,
+  })
 
   return (
     <div
@@ -92,74 +24,73 @@ export default function Intents() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
+        fontFamily: 'Space Grotesk, sans-serif',
       }}
     >
       <ProgressBar />
 
-      {/* Multiple Choice Section */}
-      <div style={{ marginTop: 60, marginBottom: 40, textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', marginBottom: 24 }}>
-          Vote the Best Real Trade
-        </h2>
-
-        <form
+      {/* Container for texts, flex-grow to take available space */}
+      <div
+        style={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+          gap: '1rem', // spacing between texts
+          maxWidth: 600,
+          margin: '0 auto',
+        }}
+      >
+        <h1
           style={{
-            display: 'inline-block',
-            textAlign: 'left',
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontSize: '1.2rem',
+            fontWeight: '700',
+            fontSize: '2rem',
+            margin: 0,
           }}
         >
-          {events.map(({ id, amount, fee, tokenName }) => {
-            const sentence =
-              amount && fee && tokenName
-                ? `Someone just got ${amount} ${tokenName} with gas fee of ${fee}.`
-                : 'Data incomplete.'
+          Your Class Record
+        </h1>
 
-            return (
-              <label
-                key={id}
-                style={{
-                  display: 'block',
-                  padding: '12px 20px',
-                  borderRadius: 12,
-                  backgroundColor: selectedId === id ? 'white' : '#222',
-                  color: selectedId === id ? 'black' : 'white',
-                  cursor: 'pointer',
-                  marginBottom: 12,
-                  transition: 'background-color 0.3s ease, color 0.3s ease',
-                  userSelect: 'none',
-                }}
-              >
-                <input
-                  type="radio"
-                  name="eventChoice"
-                  value={id}
-                  checked={selectedId === id}
-                  onChange={() => setSelectedId(id)}
-                  style={{ marginRight: 12, cursor: 'pointer' }}
-                />
-                {sentence}
-              </label>
-            )
-          })}
-        </form>
+        <p
+          style={{
+            fontWeight: '400',
+            fontSize: '1rem',
+            color: '#ccc',
+            margin: 0,
+            lineHeight: 1.4,
+          }}
+        >
+          You onboarded, gone with the BUS, and governed by voting. Your BUS balance will onboard you this trip again 24/7.
+        </p>
+
+        {isConnected && (
+          <div
+            style={{
+              fontWeight: '600',
+              fontSize: '1.2rem',
+              color: 'white',
+            }}
+          >
+            Your BUS token balance:{' '}
+            {isLoading
+              ? 'Loading...'
+              : isError
+              ? 'Error fetching token balance'
+              : `${balanceData?.formatted} ${balanceData?.symbol}`}
+          </div>
+        )}
       </div>
 
-      {/* Buttons Container */}
+      {/* Button at the bottom */}
       <div
         style={{
           display: 'flex',
-          gap: 200,
           justifyContent: 'center',
-          alignItems: 'center',
           paddingBottom: 100,
         }}
       >
-        <div style={{ transform: 'scale(1.7)' }}>
-          <ConnectButton />
-        </div>
-
         <button
           onClick={() => navigate('/trade')}
           style={{
@@ -170,7 +101,6 @@ export default function Intents() {
             backgroundColor: 'white',
             color: 'black',
             border: 'none',
-            fontFamily: 'Space Grotesk, sans-serif',
             cursor: 'pointer',
             boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
             transition: 'background 0.3s ease',
@@ -182,7 +112,7 @@ export default function Intents() {
             e.currentTarget.style.backgroundColor = 'white'
           }}
         >
-          Start to Trade!
+          Ride to My Vote Log
         </button>
       </div>
     </div>

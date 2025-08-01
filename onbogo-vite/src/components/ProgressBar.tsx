@@ -5,7 +5,7 @@ import logo from '../images/logo_onbogo_white.png'
 import ConnectButton from '../features/wallet/ConnectButton' 
 
 const steps = ['/', '/intents', '/trade', '/mint', '/vote', '/insights']
-const labels = ['Home', 'Learn', 'Vote', 'Ballot', 'Complete', 'Insights']
+const labels = ['Home', 'Learn', 'Vote', 'Ballot', 'Balance', 'Insights']
 
 export default function ProgressBar() {
   const { pathname } = useLocation()

@@ -92,7 +92,7 @@ export default function Intents() {
         }}
       >
         <button
-          onClick={() => navigate('/trade')}
+          onClick={() => navigate('/insights')}
           style={{
             padding: '0.84rem 2.1rem',
             fontSize: '1.4rem',

@@ -106,18 +106,18 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Large Buttons */}
+      {/* Buttons Container */}
       <div
         style={{
           display: 'flex',
-          gap: 100,
+          gap: 40,
           zIndex: 10,
           transform: 'scale(2)',
           marginTop: '120px',
           alignItems: 'center',
         }}
       >
-
+        {/* Big Button */}
         <button
           onClick={() => navigate('/intents')}
           style={{
@@ -132,6 +132,7 @@ export default function Home() {
             cursor: 'pointer',
             boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
             transition: 'background 0.3s ease',
+            height: 48, // fixed height for alignment reference
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = '#f0f0f0'
@@ -142,7 +143,82 @@ export default function Home() {
         >
           Learn to Trade by Simple Voting
         </button>
+
+        {/* Smaller buttons stacked vertically */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px',
+            justifyContent: 'center',
+            height: 48, // match big button height
+          }}
+        >
+          <button
+            onClick={() => navigate('/insights')}
+            style={{
+              padding: '0.25rem 0.8rem',
+              fontSize: '0.7rem',
+              fontWeight: '400',
+              borderRadius: '10px',
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.3)',
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              boxShadow: '0 1px 6px rgba(0,0,0,0.15)',
+              transition: 'background 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              height: '50%',
+              minWidth: 160,
+              textAlign: 'left',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)'
+            }}
+          >
+            View Voting Insights <span style={{ fontWeight: '400' }}>→</span>
+          </button>
+
+          <button
+            onClick={() => window.open('https://github.com/riley-wangdaiwei/onbogo', '_blank', 'noopener')}
+            style={{
+              padding: '0.25rem 0.8rem',
+              fontSize: '0.7rem',
+              fontWeight: '400',
+              borderRadius: '10px',
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.3)',
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              boxShadow: '0 1px 6px rgba(0,0,0,0.15)',
+              transition: 'background 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              height: '50%',
+              minWidth: 160,
+              textAlign: 'left',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)'
+            }}
+          >
+            See how Onbogo is built <span style={{ fontWeight: '400' }}>→</span>
+          </button>
+        </div>
       </div>
     </div>
   )
 }
+
+

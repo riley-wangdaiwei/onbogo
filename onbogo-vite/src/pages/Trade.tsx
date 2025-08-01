@@ -202,7 +202,7 @@ export default function Trade() {
         padding: '40px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
       }}
     >
       <ProgressBar />
@@ -257,17 +257,18 @@ export default function Trade() {
         </form>
       </div>
 
+      {/* Spacer to push buttons to bottom */}
+      <div style={{ flexGrow: 0.67 }} />
+
       {/* Buttons Container */}
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          paddingBottom: 100,
           gap: 20,
         }}
       >
-
         <button
           onClick={async () => {
             setMintStatus(null);
@@ -277,10 +278,10 @@ export default function Trade() {
           }}
           disabled={minting}
           style={{
-            padding: '0.84rem 2.1rem',
-            fontSize: '1.4rem',
+            padding: '1.5rem 3rem',
+            fontSize: '1.8rem',
             fontWeight: '700',
-            borderRadius: '12px',
+            borderRadius: '16px',
             backgroundColor: 'white',
             color: 'black',
             border: 'none',

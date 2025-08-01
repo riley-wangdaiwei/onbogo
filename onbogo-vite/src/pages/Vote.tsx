@@ -91,7 +91,7 @@ export default function Intents() {
         padding: '40px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
       }}
     >
       <ProgressBar />

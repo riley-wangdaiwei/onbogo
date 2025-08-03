@@ -1,56 +1,92 @@
 # 🚌 Onbogo — Learn DeFi by Riding Along
 
-Welcome aboard Onbogo, the DeFi school bus that picks up curious minds and drops them off at the doorstep of web3 confidence.
+Welcome aboard **Onbogo**, the DeFi school bus that picks up curious minds and drops them off at the doorstep of web3 confidence.
 
-Whether you're just starting your crypto journey or looking to sharpen your instincts, Onbogo gives you a playful, low-stakes way to learn:  
-by watching real trades, voting on smart moves, and growing alongside the wallets you trust.
+Built for beginners and designed by one, Onbogo is a lightweight, hands-on dApp that teaches the fundamentals of decentralized finance through real blockchain activity — no prior trading experience required.
 
 ---
 
-## 🎓 What Is Onbogo?
+## 🚌 What Is Onbogo?
 
-Onbogo is a minimalist, beginner-friendly DeFi dApp built around one idea:
+**Onbogo** is a beginner-friendly DeFi app built around a simple principle:
 
 > *You learn best by observing others — especially the best.*
 
-Here’s how it works:
-1. Hop on the bus by connecting your wallet.
-2. See the current market quote and fees to learn about "Today's Traffic".
-3. Enter a wallet address — this is your “professor,” someone you want to learn from.
-4. Review their recent swap transactions, pulled directly from the blockchain using the 1inch API.
-5. Vote on which trade you think was best, based on price, gas usage, and token movement.
-6. Earn a token for voting — you’ll need it to vote again.
-7. Repeat to sharpen your skills, build your history, and shape the future of the game.
+Instead of placing trades, users analyze real ones. Instead of guessing, they vote and reflect.  
+Onbogo brings learning and interaction together in a structured, playful format.
+
+### What Users Do
+1. Enter a wallet address — this is your “professor,” someone whose trades you want to learn from.  
+2. Review real swaps made by that wallet (pulled via the 1inch API).  
+3. Choose the trade you think was smartest — based on token pair, price, gas fee, and more.  
+4. Vote and earn a $BUS token for participating.  
+5. Track your voting history to see how your preferences evolve (e.g., do you favor low gas, high returns, certain tokens?).  
+6. Repeat and learn — the more you observe, the sharper your instincts.
 
 ---
 
-## 🧠 Why I Built This
+## 🚌 Why This Matters
 
-I noticed how hard it is for new DeFi users to start: too many charts, tools, and decisions with too little context.  
-So I built Onbogo as a soft landing.
+DeFi is often overwhelming: complex tools, volatile charts, and a steep learning curve.  
+Onbogo softens the landing:
 
-Instead of placing trades, users vote on real ones. Instead of guessing, they learn from proven behavior.  
-And instead of endless speculation, they become part of a playful, growing governance game.
+- Hands-on, low-risk experience using real blockchain data  
+- Voting as a learning mechanic, not speculation  
+- No trading required — just observe, assess, and decide  
+- Earn by engaging, not by risking funds  
 
----
-
-## 🗳️ What’s Next
-
-In future versions:
-- Users will be able to nominate and follow verified “professors”
-- Token holders will help govern which strategies or swaps are surfaced
-- Voting power will shape the educational experience for new riders
+By turning real trades into learning moments, Onbogo helps users build intuition and confidence.
 
 ---
 
-## 🧩 Powered By
+## 🚌 How It's Made
 
-- [1inch Swap, History, GasPrice, Token APIs](https://docs.1inch.io/) You are encouraged use your own 1inch API calls to run this.
-- RainbowKit + wagmi for wallet connection
+This project is built with accessibility and simplicity in mind:
+
+- **Frontend:** React (with Vite for fast development)  
+- **Wallet connection:** RainbowKit + wagmi  
+- **Smart Contract:** $BUS token deployed via Remix  
+- **Blockchain data:** 1inch GetQuote, Swap, History, Token APIs  
+- **UI Components:** Radix UI for accessible, consistent design  
+- **Serverless API proxy:** Hosted on Vercel to handle CORS and secure external API keys  
+- **Custom Ethereum address input** with validation  
+- **Local storage** to track votes and user behavior  
+
+The entire app — frontend and serverless functions — is deployed on Vercel.
+
+---
+
+## 🚌 A Personal Note
+
+I built Onbogo as a beginner myself — learning by doing, stumbling, and making workarounds when needed.  
+This project reflects that journey: it’s not perfect, but it’s real.
+
+Similarly, users are encouraged to explore, experiment, and learn by trying. Grab wallet addresses from Etherscan. Compare gas fees in real time. Think critically about token swaps.
+
+That’s what helped me, and that’s what Onbogo offers others starting out.
+
+---
+
+## 🚌 What’s Next
+
+Planned features include:
+
+- Verified “professors” and curated learning paths  
+- Community-driven governance on what trades and strategies are highlighted  
+- Deeper token-based incentives for consistent voters and accurate assessments  
+- Expanded trade analytics to sharpen learning insights
+
+---
+
+## 🚌 Powered By
+
+- 1inch API — token, gas, and trade data  
+- RainbowKit + wagmi — wallet connection  
 - Your curiosity
 
 ---
 
 ## 🚌 Join the Ride
 
-Start learning DeFi with us. One swap at a time.
+Explore real trades. Learn from the best. Vote with confidence.  
+**Onbogo** is your first step into DeFi — one smart vote at a time.
